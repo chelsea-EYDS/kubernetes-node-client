@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scaledown
+  namespace: cronjob
+spec:
+  schedule: '* 7 * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: scaledown
+              image: eydscasandbox.azurecr.io/cronjob/scaledown:latest
+              env:
+                - name: PORT
+                  value: '5000'
+                - name: KUBE_CONFIG
+                  valueFrom:
+                    secretKeyRef:
+                      name: kubeconfig
+                      key: config
+                      optional: false
+              ports:
+                - containerPort: 5000
+          restartPolicy: OnFailure
+          activeDeadlineSeconds: 300

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  cronjob:
+    image: chelseaey/scaledown:latest 
+    container_name: scaledown
+    build: 
+      context: ./server
+    environment: 
+      PORT: 5000
+    volumes: 
+      - /usr/src/app/node_modules
+      - ./server:/usr/src/app
+    ports:
+      - '5000:5000'
